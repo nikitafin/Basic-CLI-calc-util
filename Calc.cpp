@@ -1,4 +1,4 @@
-#include "Calc.h"
+#include "Calc.hpp"
 
 Calc::Solver::Solver() = default;
 
@@ -6,8 +6,10 @@ void Calc::Solver::Parse(const std::string &expression) {
   if (!Utils::ValidateParentheses(expression)) {
     throw std::logic_error("Invalid parentheses order");
   }
+
   auto infix = Utils::GetInfix(expression);
   postfix = Utils::ConvertInfixToPostfix(infix);
+
   if (!Utils::ValidatePostfix(postfix)) {
     throw std::logic_error("Invalid postfix expression");
   }
@@ -39,5 +41,5 @@ double Calc::Solver::Evaluate() {
       operands.push(stod(token));
     }
   }
-  return operands.top();
+  return std::round(operands.top() * 100) / 100;
 }

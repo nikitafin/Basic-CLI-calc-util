@@ -1,16 +1,18 @@
 ﻿#include <iostream>
 #include <string>
 
-#include "Calc.h"
+#include "Calc.hpp"
+#include "tests.hpp"
 
 int main() {
+  Tests tests;
+  tests.RunTests();
 
-  std::string expression{"(1.1 + 2,2 + 3 ) * (1 + 2)"};
-
+  std::string expression;
   Calc::Solver solver;
 
   try {
-    //std::cin >> expression;
+    std::getline(std::cin, expression);
     solver.Parse(expression);
     double result = solver.Evaluate();
     std::cout << result << std::endl;
