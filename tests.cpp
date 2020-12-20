@@ -17,6 +17,7 @@ void Tests::RunTests() {
   Test8();
   Test9();
   Test10();
+  Test11();
 }
 
 void Tests::Test1() {
@@ -134,5 +135,16 @@ void Tests::Test10() {
   } catch (const std::exception &e) {
     assert(std::strcmp(e.what(), "Invalid symbol in expression ^") == 0);
     std::cout << "Test 10 Passed" << std::endl;
+  }
+}
+void Tests::Test11() {
+  Calc::Solver s;
+  std::string expression = {"(4114 + 1234 ) / 0"};
+  try {
+    s.Parse(expression);
+    double result = s.Evaluate();
+  } catch (const std::exception &e) {
+    assert(std::strcmp(e.what(), "Division by zero") == 0);
+    std::cout << "Test 11 Passed" << std::endl;
   }
 }

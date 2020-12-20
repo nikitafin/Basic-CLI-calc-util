@@ -33,7 +33,7 @@ double Calc::Solver::Evaluate() {
         operands.push(left * right);
       } else {
         if (right == 0) {
-          throw std::domain_error("Division by zerro");
+          throw std::domain_error("Division by zero");
         }
         operands.push(left / right);
       }

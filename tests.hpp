@@ -14,4 +14,5 @@ private:
   void Test8();
   void Test9();
   void Test10();
+  void Test11();
 };
