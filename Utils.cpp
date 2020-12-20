@@ -1,4 +1,4 @@
-#include "Calc.h"
+#include "Calc.hpp"
 
 bool Calc::Utils::ValidateParentheses(const std::string &expression) {
   std::stack<char> parentheses;
@@ -55,20 +55,23 @@ std::vector<std::string> Calc::Utils::GetInfix(std::string expression) {
 
   std::string number;
   std::vector<std::string> temp;
-  for (const auto &c : expression) {
-    if (CheckIfNumberPart(c)) {
-      number.push_back(c);
-    } else if (CheckIfOperatorOrParenthesis(c)) {
+  for (const auto &token : expression) {
+    if (CheckIfNumberPart(token)) {
+      number.push_back(token);
+    } else if (CheckIfOperatorOrParenthesis(token)) {
       if (!number.empty()) {
         temp.push_back(number);
         number.clear();
-
+        temp.push_back({token});
+      } else if (token == '-') {
+        number.push_back(token);
+      } else {
+        temp.push_back({token});
       }
-      temp.push_back({c});
 
     } else {
       std::string err{"Invalid symbol in expression "};
-      err += c;
+      err += token;
       throw std::domain_error(err);
     }
   }
@@ -90,20 +93,21 @@ std::vector<std::string> Calc::Utils::ConvertInfixToPostfix(const std::vector<st
     } else if (OperationsPrecedence.count(token) == 0) {
       result.push_back(token);
     } else if (token == ")") {
-      while (stack.top() != "(") {
+      while (!stack.empty() and stack.top() != "(") {
         result.push_back(stack.top());
         stack.pop();
       }
+      stack.pop();
     } else {
       if (OperationsPrecedence.count(token)) {
-        while (OperationsPrecedence.at(stack.top()) >= OperationsPrecedence.at(token)) {
+        while (!stack.empty() and OperationsPrecedence.at(stack.top()) >= OperationsPrecedence.at(token)) {
           result.push_back(stack.top());
           stack.pop();
         }
+        stack.push(token);
       } else {
         throw std::logic_error("Invalid token: " + token);
       }
-      stack.push(token);
     }
   }
 
